@@ -1,0 +1,41 @@
+{% extends 'backend.html.twig' %}
+
+{% block body %}
+    <h1>Elenco dei file scaricabili</h1>
+
+    {% for downloadable_file in downloadable_files %}
+        {% if loop.first %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Collegato a menu</th>
+                <th>Mime Type</th>
+                <th>Dimensione</th>
+                <th>Nome originale</th>
+                <th>Link per il download</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% endif %}
+            <tr>
+                <td>{{ downloadable_file.id }}</td>
+                <td>{% if downloadable_file.getMenuItem() %}<span style="color:green;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Collegato a : {{ downloadable_file.getMenuItem().getTitle() }}"><i class="fa-solid fa-circle-check"></i></span>{% else %}<span style="color:red;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Il download non è collegato a nessun menù"><i class="fa-solid fa-circle-xmark"></i></span>{% endif %}</td>
+                <td>{{ downloadable_file.mimeType }}</td>
+                <td>{{ downloadable_file.size / 1000000 }} MB</td>
+                <td>{{ downloadable_file.filename }}</td>
+                <td>
+                    <a href="/downloadable_file/get/{{ downloadable_file.id }}">/downloadable_file/get/{{ downloadable_file.id }}</a>
+                </td>
+            </tr>
+        
+        {% if loop.last %}
+            </tbody>
+        </table>
+        {% endif %}
+    {% else %}
+    <h1>Non ci sono ancora file scaricabili da visualizzare</h1>
+    {% endfor %}
+    <a href="{{ path('app_downloadable_file_new_unlinked') }}" class="btn btn-primary">Aggiungi nuovo file scaricabile</a>
+
+{% endblock %}

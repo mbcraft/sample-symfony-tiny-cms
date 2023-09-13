@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_section_delete', {'id': section.id}) }}" onsubmit="return confirm('Sei sicuro di voler eliminare questi contenuti? Non sarà più possibile ripristinarli.');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ section.id) }}">
+    <button class="btn btn-danger">Elimina</button>
+</form>

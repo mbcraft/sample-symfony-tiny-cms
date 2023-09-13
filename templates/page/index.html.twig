@@ -1,0 +1,52 @@
+{% extends 'backend.html.twig' %}
+
+{% block body %}
+    <h1>Elenco delle pagine</h1>
+
+    {% for page in pages %}
+        {% if loop.first %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Collegata</th>
+                        <th>Titolo pagina</th>
+                        <th>Numero sezioni</th>
+                        <th>Operazioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+        {% endif %}
+                    <tr>
+                        <td>{{ page.id }}</td>
+                        <td>{% if page.getMenuItem() %}<span style="color:green;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Collegata a : {{ page.getMenuItem().getTitle() }}"><i class="fa-solid fa-circle-check"></i></span>{% else %}<span style="color:red;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="La pagina non è collegata a nessun menù"><i class="fa-solid fa-circle-xmark"></i></span>{% endif %}</td>
+                        <td>{{ page.title }}</td>
+                        <td>{{ page.getSections().count }}</td>
+                        <td class="vstack">
+                            <div class="hstack">
+                            {% if page.getSections().count == 1 %}
+                            <div class="p-1">
+                                <a href="{{ path('app_section_edit', {'id': page.getSections()[0].getId() }) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Modifica contenuto"><i class="fa-solid fa-pencil"></i></a>
+                            </div>
+                            {% endif %}
+                            <div class="p-1">
+                                <a href="{{ path('app_page_show', {'id': page.getId() }) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Visualizza pagina"><i class="fa-solid fa-eye"></i></a>
+                            </div>
+                            <div class="p-1">
+                                <a href="{{ path('app_page_edit',{'id' : page.getId() }) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Modifica titolo pagina"><i class="fa-solid fa-file-pen"></i></a>
+                            </div>
+                            <div class="p-1">
+                                <a href="{{ path('app_section_index',{'id' : page.getId() }) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Gestione sezioni pagina"><i class="fa-regular fa-file-lines"></i></a>
+                            </div>
+                            </div>
+                        </td>
+                    </tr>
+        {% if loop.last %}
+            </tbody>
+        </table>
+        {% endif %}
+    {% else %}
+    <h2 class="p-2">Non sono ancora state create pagine.</h2>
+    {% endfor %}
+    <a href="{{ path('app_page_new_unlinked') }}" class="btn btn-primary">Crea nuova pagina</a>
+{% endblock %}

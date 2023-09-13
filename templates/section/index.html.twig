@@ -1,0 +1,69 @@
+{% extends 'backend.html.twig' %}
+
+{% block body %}
+    <h1>Elenco sezioni per la pagina : {{ page.getTitle }}</h1>
+
+    {% for section in sections %}
+        {% if loop.first %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Titolo</th>
+                    <th>Ordinamento</th>
+                    <th>Operazioni</th>
+                </tr>
+            </thead>
+            <tbody>
+        {% endif %}
+            <tr>
+                <td>
+                    {% if not section.title %}
+                    <span style="color:green;font-weight:bold;">(Sezione senza titolo)</span>
+                    {% else %}
+                    {{ section.title }}
+                    {% endif%}
+                </td>
+                <td>
+                {{ section.orderVal }}
+                </td>
+                <td class="vstack">
+                    <div class="hstack">
+                        {% if not section.isFirst() %}
+                        <div class="p-1">
+                            <a href="{{ path('app_section_move_to_first', {'id' : section.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Sposta all'inizio"><i class="fa-solid fa-backward-fast"></i></a>
+                        </div>
+                        <div class="p-1">
+                            <a href="{{ path('app_section_move_to_previous', {'id' : section.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Sposta prima"><i class="fa-solid fa-backward-step"></i></a>
+                        </div>
+                        {% endif %}
+                        {% if not section.isLast() %}
+                        <div class="p-1">
+                            <a href="{{ path('app_section_move_to_next', {'id' : section.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Sposta dopo"><i class="fa-solid fa-forward-step"></i></a>
+                        </div>
+                        <div class="p-1">
+                            <a href="{{ path('app_section_move_to_last', {'id' : section.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Sposta alla fine"><i class="fa-solid fa-forward-fast"></i></a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="hstack">
+                        <div class="p-1">
+                            <a href="{{ path('app_section_show', {'id': section.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Visualizza"><i class="fa-solid fa-eye"></i></a>
+                        </div>
+                        <div class="p-1">
+                            <a href="{{ path('app_section_edit', {'id': section.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Modifica"><i class="fa-solid fa-pencil"></i></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% if loop.last %}
+            </tbody>
+        </table>
+        {% endif %}
+    {% else %}
+        
+        <h2>Non ci sono ancora sezioni per questa pagina</h2>
+        
+    {% endfor %}
+        
+    <a href="{{ path('app_section_new' , {'id' : page.getId() }) }}" class="btn btn-primary">Aggiungi una nuova sezione</a>
+{% endblock %}

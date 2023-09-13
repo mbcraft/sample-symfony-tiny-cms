@@ -1,0 +1,9 @@
+{% extends 'backend.html.twig' %}
+
+{% block body %}
+    <h1>Crea nuova voce di menu</h1>
+
+    {{ include('menu_item/_form.html.twig') }}
+
+    <a href="{{ path('app_menu_item_index') }}">Torna all'elenco dei punti di menu</a>
+{% endblock %}

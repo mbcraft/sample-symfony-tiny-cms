@@ -1,0 +1,22 @@
+{% extends 'backend.html.twig' %}
+
+{% block body %}
+    <h1>Contenuto della sezione</h1>
+
+    <hr />
+
+    {% if section.title %}
+    {{ section.title }}
+    <hr />
+    {% endif %}
+
+    {{ section.content|raw }}
+        
+    <hr />
+
+    <a href="{{ path('app_section_index', {'id' : section.getPage().getId() }) }}">Torna all'elenco delle sezioni</a>
+
+    <a href="{{ path('app_section_edit', {'id': section.id}) }}">Modifica questa sezione</a>
+
+    {{ include('section/_delete_form.html.twig') }}
+{% endblock %}

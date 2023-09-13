@@ -1,0 +1,9 @@
+{% extends 'backend.html.twig' %}
+
+{% block body %}
+    <h1>Aggiungi nuovo file scaricabile scollegato dai menu</h1>
+
+    {{ include('downloadable_file/_form.html.twig') }}
+
+    <a href="{{ path('app_downloadable_file_index') }}">Torna all'elenco dei file scaricabili senza salvare</a>
+{% endblock %}

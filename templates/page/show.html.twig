@@ -1,0 +1,19 @@
+{% extends 'backend.html.twig' %}
+
+{% block body %}
+    <h1>Page</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ page.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ page.title }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+{% endblock %}

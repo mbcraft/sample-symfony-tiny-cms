@@ -1,0 +1,120 @@
+{% extends 'backend.html.twig' %}
+
+{% block body %}
+    {% if not current_menu_item %}
+    <h1>Gestione menu principali</h1>
+    {% else %}
+    <h1>Gestione sottomenu di : {{ current_menu_item.getTitle() }}</h1>
+    {% endif %}
+
+
+        {% for menu_item in menu_items %}
+            {% if loop.first %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Titolo</th>
+                        <th>Contenuto</th>
+                        <th>Ordinamento</th>
+                        <th>Operazioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+            {% endif %}
+            <tr>
+                <td>{{ menu_item.id }}</td>
+                <td>{{ menu_item.title }}</td>
+                <td>
+                    {% if not menu_item.getPage() and not menu_item.getDownloadableFile() %}Vuoto{% endif%}
+                    {% if menu_item.getPage() %}<i class="fa-regular fa-file-lines"></i> : {{ menu_item.getPage().getTitle() }}{% endif%}
+                    {% if menu_item.getDownloadableFile() %}<i class="fa-solid fa-download"></i> : {{ menu_item.getDownloadableFile().getFilename() }}{% endif %}
+                </td>
+                <td>{{ menu_item.orderVal }}</td>
+                <td class="vstack">
+                    <div class="hstack">
+                        {% if not menu_item.isFirst() %}
+                        <div class="p-1">
+                            <a href="{{ path('app_menu_item_move_to_first', {'id' : menu_item.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Sposta all'inizio"><i class="fa-solid fa-backward-fast"></i></a>
+                        </div>
+                        <div class="p-1">
+                            <a href="{{ path('app_menu_item_move_to_previous', {'id' : menu_item.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Sposta prima"><i class="fa-solid fa-backward-step"></i></a>
+                        </div>
+                        {% endif %}
+                        {% if not menu_item.isLast() %}
+                        <div class="p-1">
+                            <a href="{{ path('app_menu_item_move_to_next', {'id' : menu_item.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Sposta dopo"><i class="fa-solid fa-forward-step"></i></a>
+                        </div>
+                        <div class="p-1">
+                            <a href="{{ path('app_menu_item_move_to_last', {'id' : menu_item.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Sposta alla fine"><i class="fa-solid fa-forward-fast"></i></a>
+                        </div>
+                        {% endif %}
+                        </div>
+                    </div>
+                    <div class="hstack">
+                        <div class="p-1">
+                            <a href="{{ path('app_menu_item_edit', {'id': menu_item.id}) }}" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Modifica"><i class="fa-solid fa-pencil"></i></a>
+                        </div>
+                            {% if not current_menu_item %}
+                        <div class="p-1">
+                            <a href="{{ path('app_menu_item_index_level2', {'id' : menu_item.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Menu di secondo livello"><i class="fa-regular fa-folder-open"></i></a>
+                        </div>
+                            {% endif %}
+                        <div class="p-1">
+                            <a href="{{ path('app_menu_item_delete', {'id' : menu_item.id})}}" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Elimina menu"><i class="fa-solid fa-trash"></i></a>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="hstack">
+                            {% if menu_item.getPage() %}
+                            <div class="p-1">
+                                <a href="{{ path('app_page_unlink',{'id' : menu_item.id}) }}" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Scollega pagina"><i class="fa-solid fa-file-circle-xmark"></i></a>
+                            </div>
+                            <div class="p-1">
+                                <a href="{{ path('app_page_show', {'id': menu_item.getPage().getId() }) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Visualizza pagina"><i class="fa-solid fa-eye"></i></a>
+                            </div>
+                            <div class="p-1">
+                                <a href="{{ path('app_page_edit',{'id' : menu_item.getPage().getId() }) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Modifica titolo pagina"><i class="fa-solid fa-file-pen"></i></a>
+                            </div>
+                            <div class="p-1">
+                                <a href="{{ path('app_section_index',{'id' : menu_item.getPage().getId() }) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Gestione contenuti pagina"><i class="fa-regular fa-file-lines"></i></a>
+                            </div>
+                            {% endif %}
+                            {% if menu_item.getDownloadableFile() %}
+                            <div class="p-1">
+                        
+                                <a href="{{ path('app_downloadable_file_unlink',{'id' : menu_item.id}) }}" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Scollega download"><i class="fa-solid fa-anchor-circle-xmark"></i></a>
+                            </div>
+                            {% endif %}
+                            {% if not menu_item.getPage() and not menu_item.getDownloadableFile() %}
+                            <div class="p-1">
+                                <a href="{{ path('app_page_new', {'id' : menu_item.id}) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Aggiungi pagina"><i class="fa-solid fa-file-circle-plus"></i></a>
+                            </div>
+                            <div class="p-1">    
+                                <a href="{{ path('app_downloadable_file_new',{ 'id' : menu_item.id }) }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Aggiungi download"><i class="fa-solid fa-download"></i></a>
+                            </div>
+                            {% endif %}
+                            
+                        </div>
+                    </div>
+                    
+                </td>
+            </tr>
+            {% if loop.last %}
+                </tbody>
+            </table>
+            {% endif %}
+        {% else %}
+            {% if not current_menu_item %}
+            <h3 class="p-3">Nessun menu principale trovato. Creane!</h3>
+            {% else %}
+            <h3 class="p-3">Nessun menu di secondo livello trovato. Creane!</h3>
+            {% endif %}
+        {% endfor %}
+
+    {% if not current_menu_item %}
+    <a href="{{ path('app_menu_item_new') }}" class="btn btn-primary">Crea nuovo</a>
+    {% else %}
+    <a href="{{ path('app_menu_item_new_level2', {'id' : current_menu_item.getId() }) }}" class="btn btn-primary">Crea nuovo</a>
+    {% endif %}
+{% endblock %}

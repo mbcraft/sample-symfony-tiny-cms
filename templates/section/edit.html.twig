@@ -1,0 +1,17 @@
+{% extends 'backend.html.twig' %}
+
+{% block body %}
+    <h1>Modifica sezione</h1>
+
+    {{ include('section/_form.html.twig', {'button_label': 'Salva'}) }}
+    <br />
+    <br />
+    Oppure <a href="{{ path('app_section_index',{'id' : section.getPage().getId() }) }}">torna alla pagina senza salvare</a>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $(".summernote").summernote();
+    });
+    
+    </script>
+{% endblock %}
